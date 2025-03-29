@@ -1,8 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
 export default function Home() {
+  const [view, setView] = useState('home');
   const [dayIndex, setDayIndex] = useState(0);
   const [checkedGoals, setCheckedGoals] = useState([]);
   const [mood, setMood] = useState(null);
@@ -20,24 +21,6 @@ export default function Home() {
     "Even when you doubt yourself, I believe in you ✨",
     "Progress, not perfection. Always. 🌱",
     "You’re my favorite kind of magic 💫"
-  ];
-
-  const affirmations = [
-    "It’s okay if today feels heavy. You’re allowed to slow down. 🌧️",
-    "You are not your productivity. Just existing is enough. 🌿",
-    "Even small steps are steps. Be proud of the little things. 👣",
-    "Your feelings are valid. You don’t have to fix everything. 💛",
-    "You are loved — even when you don’t feel like it. 💌",
-    "Healing isn’t linear. Some days are just about surviving. 🌙",
-    "You’ve gotten through 100% of your hard days so far. 💪",
-    "Being gentle with yourself is powerful. 🕊️",
-    "You can say no. You can rest. You are allowed. 🛏️",
-    "The world is softer with you in it. Don’t forget that. ☁️",
-    "No sugar, no pressure — just kindness today. 🍬❌",
-    "Your health is your priority, and I’m proud of you for making it that. 💖",
-    "Remember: I'm not going anywhere. I’m here, always. 🫂",
-    "Even when it’s hard, you’re still trying. That matters. 🌱",
-    "The way you show up for yourself is beautiful. 💕"
   ];
 
   const generateDays = () => {
@@ -143,72 +126,110 @@ export default function Home() {
     setTimeout(() => setCalmMode(false), 60000);
   };
 
-  return (
-    <div className="min-h-screen p-6 transition-all duration-500 bg-gradient-to-br from-purple-200 via-pink-100 to-yellow-100 text-gray-800">
-      {calmMode && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col text-white text-center">
-          <p className="text-3xl mb-4 animate-pulse">Breathe in... breathe out 🧘‍♀️</p>
-          <p className="text-sm italic">You’re okay. You’re loved. Just this moment matters. 💖</p>
-        </div>
-      )}
+  const renderChecklist = () => (
+    <div className="max-w-xl mx-auto mt-4">
+      <button onClick={() => setView('home')} className="mb-4 text-sm text-blue-600">← Back</button>
+      <h2 className="text-lg font-semibold mb-1">{days[dayIndex].title}</h2>
+      <p className="text-xs italic text-gray-500 mb-4">{days[dayIndex].quote}</p>
 
-      <div className="mb-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">🌿 Disha’s Daily Wellness Checklist 🌿</h1>
+      <ul className="mb-6">
+        {days[dayIndex].goals.map((goal, i) => (
+          <li key={i} className="flex items-start space-x-2 mb-3">
+            <input type="checkbox" checked={checkedGoals.includes(i)} onChange={() => toggleCheckbox(i)} />
+            <span className={checkedGoals.includes(i) ? 'line-through text-gray-400' : ''}>{goal}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mb-6">
+        <h3 className="text-sm font-semibold mb-1">How are you feeling today?</h3>
+        <div className="flex gap-4 text-2xl">
+          {['😄', '😐', '😢', '🥹'].map((emoji) => (
+            <span key={emoji} onClick={() => setMoodValue(emoji)} className="cursor-pointer">
+              {emoji}
+            </span>
+          ))}
+        </div>
+        {mood && <p className="text-xs text-gray-500 mt-2">Mood saved: {mood}</p>}
       </div>
 
-      <button
-        onClick={startCalmTimer}
-        className="mb-4 bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded shadow hover:bg-blue-200"
-      >
-        🧘 I need a 1-min calm
-      </button>
+      <div className="mb-6">
+        <label className="text-sm font-semibold" htmlFor="journal">Today’s Journal:</label>
+        <textarea
+          id="journal"
+          value={journal}
+          onChange={handleJournalChange}
+          placeholder="Write how you feel today..."
+          className="w-full mt-1 border border-gray-300 rounded-md p-2 text-sm"
+          rows={4}
+        />
+      </div>
 
-      <div className="max-w-xl mx-auto">
-        <h2 className="text-lg font-semibold mb-1">{days[dayIndex].title}</h2>
-        <p className="text-xs italic text-gray-500 mb-4">{days[dayIndex].quote}</p>
+      <div className="bg-pink-100 text-pink-700 italic rounded-md text-center p-4 border border-pink-300">
+        💌 {loveNotes[dayIndex % loveNotes.length]}
+      </div>
 
-        <ul className="mb-6">
-          {days[dayIndex].goals.map((goal, i) => (
-            <li key={i} className="flex items-start space-x-2 mb-3">
-              <input type="checkbox" checked={checkedGoals.includes(i)} onChange={() => toggleCheckbox(i)} />
-              <span className={checkedGoals.includes(i) ? 'line-through text-gray-400' : ''}>{goal}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mb-6">
-          <h3 className="text-sm font-semibold mb-1">How are you feeling today?</h3>
-          <div className="flex gap-4 text-2xl">
-            {['😄', '😐', '😢', '🥹'].map((emoji) => (
-              <span key={emoji} onClick={() => setMoodValue(emoji)} className="cursor-pointer">
-                {emoji}
-              </span>
-            ))}
-          </div>
-          {mood && <p className="text-xs text-gray-500 mt-2">Mood saved: {mood}</p>}
-        </div>
-
-        <div className="mb-6">
-          <label className="text-sm font-semibold" htmlFor="journal">Today’s Journal:</label>
-          <textarea
-            id="journal"
-            value={journal}
-            onChange={handleJournalChange}
-            placeholder="Write how you feel today..."
-            className="w-full mt-1 border border-gray-300 rounded-md p-2 text-sm"
-            rows={4}
-          />
-        </div>
-
-        <div className="bg-pink-100 text-pink-700 italic rounded-md text-center p-4 border border-pink-300">
-          💌 {loveNotes[dayIndex % loveNotes.length]}
-        </div>
-
-        <div className="mt-8 text-center">
-          <img src="/disha-polaroid.png" alt="Sumeet & Disha" className="mx-auto rounded-md shadow-md w-48 h-auto" />
-          <p className="text-xs text-gray-500 mt-2">This is our journey — one day at a time 💫</p>
-        </div>
+      <div className="mt-8 text-center">
+        <img src="/disha-polaroid.png" alt="Sumeet & Disha" className="mx-auto rounded-md shadow-md w-48 h-auto" />
+        <p className="text-xs text-gray-500 mt-2">This is our journey — one day at a time 💫</p>
       </div>
     </div>
   );
+
+  const renderView = () => {
+    if (view === 'checklist') return renderChecklist();
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-100 via-yellow-100 to-purple-100 text-gray-800 font-fredoka p-6">
+        {calmMode && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col text-white text-center">
+            <p className="text-3xl mb-4 animate-pulse">Breathe in... breathe out 🧘‍♀️</p>
+            <p className="text-sm italic">You’re okay. You’re loved. Just this moment matters. 💖</p>
+          </div>
+        )}
+
+        <div className="max-w-xl mx-auto text-center">
+          <h1 className="text-3xl font-bold mb-2">Hi Disha! 🌸</h1>
+          <p className="text-sm mb-6">Welcome to your wellness space. Pick what you’d like to do today 🧃</p>
+
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              onClick={() => setView('checklist')}
+              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center hover:scale-105 transition-transform"
+            >
+              <span className="text-3xl mb-1">✅</span>
+              <span className="text-sm font-medium">Checklist</span>
+            </button>
+
+            <button
+              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center opacity-50 cursor-not-allowed"
+            >
+              <span className="text-3xl mb-1">📓</span>
+              <span className="text-sm font-medium">Journal</span>
+            </button>
+
+            <button
+              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center opacity-50 cursor-not-allowed"
+            >
+              <span className="text-3xl mb-1">🐾</span>
+              <span className="text-sm font-medium">Mood Tracker</span>
+            </button>
+
+            <button
+              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center opacity-50 cursor-not-allowed"
+            >
+              <span className="text-3xl mb-1">💕</span>
+              <span className="text-sm font-medium">Love Notes</span>
+            </button>
+          </div>
+
+          <div className="mt-10 text-xs text-gray-400">
+            More features coming soon 💖
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return renderView();
 }
