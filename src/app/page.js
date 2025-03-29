@@ -84,35 +84,54 @@ export default function Home() {
   };
 
   return (
-    <div
-      style={{
-        padding: '40px',
-        fontFamily: 'Segoe UI, sans-serif',
-        backgroundColor: '#f7f9fb',
-        minHeight: '100vh',
-        transition: 'background-color 0.5s ease-in-out',
-        animation: 'fadeIn 1s ease-in-out'
-      }}
-    >
+    <div style={{
+      padding: '5vw',
+      fontFamily: 'Segoe UI, sans-serif',
+      backgroundColor: '#f7f9fb',
+      minHeight: '100vh',
+      transition: 'background-color 0.5s ease-in-out',
+      animation: 'fadeIn 1s ease-in-out'
+    }}>
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
+
+        @media (max-width: 600px) {
+          .card {
+            padding: 20px !important;
+            border-radius: 10px !important;
+          }
+
+          h1 {
+            font-size: 22px !important;
+          }
+
+          h2 {
+            font-size: 18px !important;
+          }
+
+          ul {
+            font-size: 14px !important;
+          }
+
+          .emoji-picker span {
+            font-size: 20px !important;
+          }
+        }
       `}</style>
 
-      <div
-        style={{
-          maxWidth: '700px',
-          margin: '0 auto',
-          backgroundColor: '#ffffff',
-          padding: '35px',
-          borderRadius: '15px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-          transition: 'transform 0.3s ease',
-          animation: 'fadeIn 0.8s ease-in-out'
-        }}
-      >
+      <div className="card" style={{
+        maxWidth: '700px',
+        margin: '0 auto',
+        backgroundColor: '#ffffff',
+        padding: '35px',
+        borderRadius: '15px',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+        transition: 'transform 0.3s ease',
+        animation: 'fadeIn 0.8s ease-in-out'
+      }}>
         <h1 style={{ fontSize: '30px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#333' }}>
           Disha’s Daily Wellness Checklist 🌿
         </h1>
@@ -146,7 +165,7 @@ export default function Home() {
 
         <div style={{ marginTop: '30px', textAlign: 'center' }}>
           <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#444', marginBottom: '8px' }}>How are you feeling today?</h3>
-          <div style={{ fontSize: '24px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+          <div className="emoji-picker" style={{ fontSize: '24px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
             {['😄', '😐', '😢', '🥹'].map((emoji) => (
               <span
                 key={emoji}
