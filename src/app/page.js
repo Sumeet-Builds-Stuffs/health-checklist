@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
 export default function Home() {
-  const [view, setView] = useState('home');
   const [dayIndex, setDayIndex] = useState(0);
   const [checkedGoals, setCheckedGoals] = useState([]);
   const [mood, setMood] = useState(null);
@@ -126,128 +125,64 @@ export default function Home() {
     setTimeout(() => setCalmMode(false), 60000);
   };
 
-  const renderJournal = () => (
-    <div className="max-w-xl mx-auto mt-4">
-      <button onClick={() => setView('home')} className="mb-4 text-sm text-blue-600">← Back</button>
-      <h2 className="text-lg font-semibold mb-4">📓 Your Journal - Day {dayIndex + 1}</h2>
+  return (
+    <div className="min-h-screen p-6 transition-all duration-500 bg-gradient-to-br from-purple-200 via-pink-100 to-yellow-100 text-gray-800">
+      {calmMode && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col text-white text-center">
+          <p className="text-3xl mb-4 animate-pulse">Breathe in... breathe out 🧘‍♀️</p>
+          <p className="text-sm italic">You’re okay. You’re loved. Just this moment matters. 💖</p>
+        </div>
+      )}
 
-      <textarea
-        value={journal}
-        onChange={handleJournalChange}
-        placeholder="Write anything on your mind..."
-        className="w-full mt-1 border border-gray-300 rounded-md p-3 text-sm min-h-[200px]"
-      />
+      <div className="max-w-xl mx-auto">
+        <h1 className="text-3xl font-bold mb-2">🌿 Disha’s Daily Wellness Checklist 🌿</h1>
+        <p className="text-sm mb-6">Hi Disha, how are you doing today? This is your little space of calm — made with love, just for you. ❤️</p>
 
-      <p className="text-xs text-gray-500 mt-4 italic">Your thoughts are safe here 💖</p>
-    </div>
-  );
+        <h2 className="text-lg font-semibold mb-1">{days[dayIndex].title}</h2>
+        <p className="text-xs italic text-gray-500 mb-4">{days[dayIndex].quote}</p>
 
-  const renderChecklist = () => (
-    <div className="max-w-xl mx-auto mt-4">
-      <button onClick={() => setView('home')} className="mb-4 text-sm text-blue-600">← Back</button>
-      <h2 className="text-lg font-semibold mb-1">{days[dayIndex].title}</h2>
-      <p className="text-xs italic text-gray-500 mb-4">{days[dayIndex].quote}</p>
-
-      <ul className="mb-6">
-        {days[dayIndex].goals.map((goal, i) => (
-          <li key={i} className="flex items-start space-x-2 mb-3">
-            <input type="checkbox" checked={checkedGoals.includes(i)} onChange={() => toggleCheckbox(i)} />
-            <span className={checkedGoals.includes(i) ? 'line-through text-gray-400' : ''}>{goal}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold mb-1">How are you feeling today?</h3>
-        <div className="flex gap-4 text-2xl">
-          {['😄', '😐', '😢', '🥹'].map((emoji) => (
-            <span key={emoji} onClick={() => setMoodValue(emoji)} className="cursor-pointer">
-              {emoji}
-            </span>
+        <ul className="mb-6">
+          {days[dayIndex].goals.map((goal, i) => (
+            <li key={i} className="flex items-start space-x-2 mb-3">
+              <input type="checkbox" checked={checkedGoals.includes(i)} onChange={() => toggleCheckbox(i)} />
+              <span className={checkedGoals.includes(i) ? 'line-through text-gray-400' : ''}>{goal}</span>
+            </li>
           ))}
+        </ul>
+
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold mb-1">How are you feeling today?</h3>
+          <div className="flex gap-4 text-2xl">
+            {['😄', '😐', '😢', '🥹'].map((emoji) => (
+              <span key={emoji} onClick={() => setMoodValue(emoji)} className="cursor-pointer">
+                {emoji}
+              </span>
+            ))}
+          </div>
+          {mood && <p className="text-xs text-gray-500 mt-2">Mood saved: {mood}</p>}
         </div>
-        {mood && <p className="text-xs text-gray-500 mt-2">Mood saved: {mood}</p>}
-      </div>
 
-      <div className="mb-6">
-        <label className="text-sm font-semibold" htmlFor="journal">Today’s Journal:</label>
-        <textarea
-          id="journal"
-          value={journal}
-          onChange={handleJournalChange}
-          placeholder="Write how you feel today..."
-          className="w-full mt-1 border border-gray-300 rounded-md p-2 text-sm"
-          rows={4}
-        />
-      </div>
+        <div className="mb-6">
+          <label className="text-sm font-semibold" htmlFor="journal">Today’s Journal:</label>
+          <textarea
+            id="journal"
+            value={journal}
+            onChange={handleJournalChange}
+            placeholder="Write how you feel today..."
+            className="w-full mt-1 border border-gray-300 rounded-md p-2 text-sm"
+            rows={4}
+          />
+        </div>
 
-      <div className="bg-pink-100 text-pink-700 italic rounded-md text-center p-4 border border-pink-300">
-        💌 {loveNotes[dayIndex % loveNotes.length]}
-      </div>
+        <div className="bg-pink-100 text-pink-700 italic rounded-md text-center p-4 border border-pink-300">
+          💌 {loveNotes[dayIndex % loveNotes.length]}
+        </div>
 
-      <div className="mt-8 text-center">
-        <img src="/disha-polaroid.png" alt="Sumeet & Disha" className="mx-auto rounded-md shadow-md w-48 h-auto" />
-        <p className="text-xs text-gray-500 mt-2">This is our journey — one day at a time 💫</p>
+        <div className="mt-8 text-center">
+          <img src="/disha-polaroid.png" alt="Sumeet & Disha" className="mx-auto rounded-md shadow-md w-48 h-auto" />
+          <p className="text-xs text-gray-500 mt-2">This is our journey — one day at a time 💫</p>
+        </div>
       </div>
     </div>
   );
-
-  const renderView = () => {
-    if (view === 'checklist') return renderChecklist();
-    if (view === 'journal') return renderJournal();
-
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-100 via-yellow-100 to-purple-100 text-gray-800 font-fredoka p-6">
-        {calmMode && (
-          <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col text-white text-center">
-            <p className="text-3xl mb-4 animate-pulse">Breathe in... breathe out 🧘‍♀️</p>
-            <p className="text-sm italic">You’re okay. You’re loved. Just this moment matters. 💖</p>
-          </div>
-        )}
-
-        <div className="max-w-xl mx-auto text-center">
-          <h1 className="text-3xl font-bold mb-2">Hi Disha! 🌸</h1>
-          <p className="text-sm mb-6">Welcome to your wellness space. Pick what you’d like to do today 🧃</p>
-
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={() => setView('checklist')}
-              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center hover:scale-105 transition-transform"
-            >
-              <span className="text-3xl mb-1">✅</span>
-              <span className="text-sm font-medium">Checklist</span>
-            </button>
-
-            <button
-              onClick={() => setView('journal')}
-              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center hover:scale-105 transition-transform"
-            >
-              <span className="text-3xl mb-1">📓</span>
-              <span className="text-sm font-medium">Journal</span>
-            </button>
-
-            <button
-              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center opacity-50 cursor-not-allowed"
-            >
-              <span className="text-3xl mb-1">🐾</span>
-              <span className="text-sm font-medium">Mood Tracker</span>
-            </button>
-
-            <button
-              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center opacity-50 cursor-not-allowed"
-            >
-              <span className="text-3xl mb-1">💕</span>
-              <span className="text-sm font-medium">Love Notes</span>
-            </button>
-          </div>
-
-          <div className="mt-10 text-xs text-gray-400">
-            More features coming soon 💖
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return renderView();
 }
