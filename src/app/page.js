@@ -126,6 +126,22 @@ export default function Home() {
     setTimeout(() => setCalmMode(false), 60000);
   };
 
+  const renderJournal = () => (
+    <div className="max-w-xl mx-auto mt-4">
+      <button onClick={() => setView('home')} className="mb-4 text-sm text-blue-600">← Back</button>
+      <h2 className="text-lg font-semibold mb-4">📓 Your Journal - Day {dayIndex + 1}</h2>
+
+      <textarea
+        value={journal}
+        onChange={handleJournalChange}
+        placeholder="Write anything on your mind..."
+        className="w-full mt-1 border border-gray-300 rounded-md p-3 text-sm min-h-[200px]"
+      />
+
+      <p className="text-xs text-gray-500 mt-4 italic">Your thoughts are safe here 💖</p>
+    </div>
+  );
+
   const renderChecklist = () => (
     <div className="max-w-xl mx-auto mt-4">
       <button onClick={() => setView('home')} className="mb-4 text-sm text-blue-600">← Back</button>
@@ -178,6 +194,7 @@ export default function Home() {
 
   const renderView = () => {
     if (view === 'checklist') return renderChecklist();
+    if (view === 'journal') return renderJournal();
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-100 via-yellow-100 to-purple-100 text-gray-800 font-fredoka p-6">
@@ -202,7 +219,8 @@ export default function Home() {
             </button>
 
             <button
-              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center opacity-50 cursor-not-allowed"
+              onClick={() => setView('journal')}
+              className="bg-white rounded-2xl shadow-md py-6 px-4 flex flex-col items-center hover:scale-105 transition-transform"
             >
               <span className="text-3xl mb-1">📓</span>
               <span className="text-sm font-medium">Journal</span>
