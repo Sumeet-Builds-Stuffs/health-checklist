@@ -84,8 +84,35 @@ export default function Home() {
   };
 
   return (
-    <div style={{ padding: '40px', fontFamily: 'Segoe UI, sans-serif', backgroundColor: '#f7f9fb', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '700px', margin: '0 auto', backgroundColor: '#ffffff', padding: '35px', borderRadius: '15px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+    <div
+      style={{
+        padding: '40px',
+        fontFamily: 'Segoe UI, sans-serif',
+        backgroundColor: '#f7f9fb',
+        minHeight: '100vh',
+        transition: 'background-color 0.5s ease-in-out',
+        animation: 'fadeIn 1s ease-in-out'
+      }}
+    >
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
+      <div
+        style={{
+          maxWidth: '700px',
+          margin: '0 auto',
+          backgroundColor: '#ffffff',
+          padding: '35px',
+          borderRadius: '15px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+          transition: 'transform 0.3s ease',
+          animation: 'fadeIn 0.8s ease-in-out'
+        }}
+      >
         <h1 style={{ fontSize: '30px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#333' }}>
           Disha’s Daily Wellness Checklist 🌿
         </h1>
@@ -104,7 +131,7 @@ export default function Home() {
           <ul style={{ paddingLeft: '0px' }}>
             {days[dayIndex].goals.map((goal, i) => (
               <li key={i} style={{ marginBottom: '12px', fontSize: '16px', color: '#333', listStyle: 'none' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.3s ease' }}>
                   <input
                     type="checkbox"
                     checked={checkedGoals.includes(i)}
