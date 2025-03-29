@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [dayIndex, setDayIndex] = useState(0);
+  const [checkedGoals, setCheckedGoals] = useState([]);
 
   const generateDays = () => {
     const baseQuotes = [
@@ -45,10 +46,26 @@ export default function Home() {
       const dayDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
       const index = dayDiff >= 0 && dayDiff < 180 ? dayDiff : 0;
       setDayIndex(index);
+
+      const storedChecks = localStorage.getItem(`checked-${index}`);
+      if (storedChecks) {
+        setCheckedGoals(JSON.parse(storedChecks));
+      }
     }, 0);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const toggleCheckbox = (i) => {
+    const updated = [...checkedGoals];
+    if (updated.includes(i)) {
+      updated.splice(updated.indexOf(i), 1);
+    } else {
+      updated.push(i);
+    }
+    setCheckedGoals(updated);
+    localStorage.setItem(`checked-${dayIndex}`, JSON.stringify(updated));
+  };
 
   return (
     <div style={{ padding: '40px', fontFamily: 'Segoe UI, sans-serif', backgroundColor: '#f7f9fb', minHeight: '100vh' }}>
@@ -67,9 +84,18 @@ export default function Home() {
           <p style={{ fontStyle: 'italic', fontSize: '15px', color: '#777', marginBottom: '20px' }}>
             {days[dayIndex].quote}
           </p>
-          <ul style={{ paddingLeft: '20px' }}>
+          <ul style={{ paddingLeft: '0px' }}>
             {days[dayIndex].goals.map((goal, i) => (
-              <li key={i} style={{ marginBottom: '12px', fontSize: '16px', color: '#333' }}>{goal}</li>
+              <li key={i} style={{ marginBottom: '12px', fontSize: '16px', color: '#333', listStyle: 'none' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <input
+                    type="checkbox"
+                    checked={checkedGoals.includes(i)}
+                    onChange={() => toggleCheckbox(i)}
+                  />
+                  <span style={{ textDecoration: checkedGoals.includes(i) ? 'line-through' : 'none' }}>{goal}</span>
+                </label>
+              </li>
             ))}
           </ul>
         </div>
