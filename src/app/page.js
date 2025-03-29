@@ -7,6 +7,8 @@ export default function Home() {
   const [checkedGoals, setCheckedGoals] = useState([]);
   const [mood, setMood] = useState(null);
   const [journal, setJournal] = useState('');
+  const [theme, setTheme] = useState('dreamy');
+  const [calmMode, setCalmMode] = useState(false);
 
   const loveNotes = [
     "You don’t have to be perfect to be loved. You already are 💕",
@@ -38,6 +40,13 @@ export default function Home() {
     "Even when it’s hard, you’re still trying. That matters. 🌱",
     "The way you show up for yourself is beautiful. 💕"
   ];
+
+  const themes = {
+    light: 'bg-white text-black',
+    midnight: 'bg-gray-900 text-white',
+    dreamy: 'bg-gradient-to-br from-purple-200 via-pink-100 to-yellow-100 text-gray-800',
+    pink: 'bg-pink-100 text-pink-900'
+  };
 
   const generateDays = () => {
     const baseQuotes = [
@@ -91,6 +100,9 @@ export default function Home() {
     const storedMood = localStorage.getItem(`mood-${index}`);
     if (storedMood) setMood(storedMood);
 
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) setTheme(storedTheme);
+
     const fetchJournal = async () => {
       const { data } = await supabase
         .from('journals')
@@ -137,14 +149,43 @@ export default function Home() {
       ]);
   };
 
-  return (
-    <div className="min-h-screen bg-white p-6 font-sans">
-      <h1 className="text-3xl font-bold text-center mb-2">🌿 Disha’s Daily Wellness Checklist 🌿</h1>
-      <p className="text-center text-sm text-gray-700 mb-6">Hi Disha, how are you doing today? This is your safe space 🌸</p>
+  const startCalmTimer = () => {
+    setCalmMode(true);
+    setTimeout(() => setCalmMode(false), 60000);
+  };
 
-      <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-4 text-center text-sm font-medium text-gray-700 mb-6">
-        🌼 {affirmations[dayIndex % affirmations.length]}
+  return (
+    <div className={`min-h-screen p-6 transition-all duration-500 ${themes[theme]}`}>
+      {calmMode && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col text-white text-center">
+          <p className="text-3xl mb-4 animate-pulse">Breathe in... breathe out 🧘‍♀️</p>
+          <p className="text-sm italic">You’re okay. You’re loved. Just this moment matters. 💖</p>
+        </div>
+      )}
+
+      <div className="mb-4 flex justify-between items-center">
+        <h1 className="text-xl font-bold">🌿 Disha’s Daily Wellness Checklist 🌿</h1>
+        <select
+          value={theme}
+          onChange={(e) => {
+            setTheme(e.target.value);
+            localStorage.setItem('theme', e.target.value);
+          }}
+          className="border px-2 py-1 rounded text-sm"
+        >
+          <option value="dreamy">Dreamy</option>
+          <option value="light">Light</option>
+          <option value="midnight">Midnight</option>
+          <option value="pink">Soft Pink</option>
+        </select>
       </div>
+
+      <button
+        onClick={startCalmTimer}
+        className="mb-4 bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded shadow hover:bg-blue-200"
+      >
+        🧘 I need a 1-min calm
+      </button>
 
       <div className="max-w-xl mx-auto">
         <h2 className="text-lg font-semibold mb-1">{days[dayIndex].title}</h2>
