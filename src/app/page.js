@@ -7,7 +7,6 @@ export default function Home() {
   const [checkedGoals, setCheckedGoals] = useState([]);
   const [mood, setMood] = useState(null);
   const [journal, setJournal] = useState('');
-  const [theme, setTheme] = useState('dreamy');
   const [calmMode, setCalmMode] = useState(false);
 
   const loveNotes = [
@@ -40,13 +39,6 @@ export default function Home() {
     "Even when it’s hard, you’re still trying. That matters. 🌱",
     "The way you show up for yourself is beautiful. 💕"
   ];
-
-  const themes = {
-    light: 'bg-white text-black',
-    midnight: 'bg-gray-900 text-white',
-    dreamy: 'bg-gradient-to-br from-purple-200 via-pink-100 to-yellow-100 text-gray-800',
-    pink: 'bg-pink-100 text-pink-900'
-  };
 
   const generateDays = () => {
     const baseQuotes = [
@@ -100,9 +92,6 @@ export default function Home() {
     const storedMood = localStorage.getItem(`mood-${index}`);
     if (storedMood) setMood(storedMood);
 
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme) setTheme(storedTheme);
-
     const fetchJournal = async () => {
       const { data } = await supabase
         .from('journals')
@@ -155,7 +144,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-screen p-6 transition-all duration-500 ${themes[theme]}`}>
+    <div className="min-h-screen p-6 transition-all duration-500 bg-gradient-to-br from-purple-200 via-pink-100 to-yellow-100 text-gray-800">
       {calmMode && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center flex-col text-white text-center">
           <p className="text-3xl mb-4 animate-pulse">Breathe in... breathe out 🧘‍♀️</p>
@@ -165,19 +154,6 @@ export default function Home() {
 
       <div className="mb-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">🌿 Disha’s Daily Wellness Checklist 🌿</h1>
-        <select
-          value={theme}
-          onChange={(e) => {
-            setTheme(e.target.value);
-            localStorage.setItem('theme', e.target.value);
-          }}
-          className="border px-2 py-1 rounded text-sm"
-        >
-          <option value="dreamy">Dreamy</option>
-          <option value="light">Light</option>
-          <option value="midnight">Midnight</option>
-          <option value="pink">Soft Pink</option>
-        </select>
       </div>
 
       <button
