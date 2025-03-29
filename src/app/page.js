@@ -5,6 +5,7 @@ export default function Home() {
   const [dayIndex, setDayIndex] = useState(0);
   const [checkedGoals, setCheckedGoals] = useState([]);
   const [mood, setMood] = useState(null);
+  const [journal, setJournal] = useState('');
 
   const loveNotes = [
     "You don’t have to be perfect to be loved. You already are 💕",
@@ -75,6 +76,11 @@ export default function Home() {
       if (storedMood) {
         setMood(storedMood);
       }
+
+      const storedJournal = localStorage.getItem(`journal-${index}`);
+      if (storedJournal) {
+        setJournal(storedJournal);
+      }
     }, 0);
 
     return () => clearTimeout(timer);
@@ -94,6 +100,12 @@ export default function Home() {
   const setMoodValue = (value) => {
     setMood(value);
     localStorage.setItem(`mood-${dayIndex}`, value);
+  };
+
+  const handleJournalChange = (e) => {
+    const value = e.target.value;
+    setJournal(value);
+    localStorage.setItem(`journal-${dayIndex}`, value);
   };
 
   return (
@@ -213,7 +225,6 @@ export default function Home() {
           {mood && <p style={{ marginTop: '10px', color: '#666' }}>Mood saved: {mood}</p>}
         </div>
 
-        {/* Love Note */}
         <div style={{
           marginTop: '40px',
           background: '#ffe0f0',
@@ -227,6 +238,33 @@ export default function Home() {
           boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
         }}>
           💌 {loveNotes[dayIndex % loveNotes.length]}
+        </div>
+
+        {/* Journal box */}
+        <div style={{
+          marginTop: '30px',
+          background: '#f9f9f9',
+          padding: '15px',
+          borderRadius: '10px',
+          border: '1px solid #ccc'
+        }}>
+          <label htmlFor="journal" style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px', color: '#444' }}>Today’s Journal:</label>
+          <textarea
+            id="journal"
+            value={journal}
+            onChange={handleJournalChange}
+            placeholder="Write how you feel today..."
+            rows={4}
+            style={{
+              width: '100%',
+              borderRadius: '8px',
+              padding: '10px',
+              fontFamily: 'inherit',
+              fontSize: '14px',
+              border: '1px solid #ccc',
+              resize: 'vertical'
+            }}
+          />
         </div>
 
         <p style={{ marginTop: '40px', fontSize: '14px', textAlign: 'center', color: '#666' }}>
