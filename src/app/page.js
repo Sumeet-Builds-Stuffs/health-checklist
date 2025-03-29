@@ -119,158 +119,44 @@ export default function Home() {
       transition: 'background-color 0.5s ease-in-out',
       animation: 'fadeIn 1s ease-in-out'
     }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
-        :root { color-scheme: light; }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes float {
-          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-        .floaty {
-          position: absolute;
-          bottom: -50px;
-          animation: float 12s linear infinite;
-          font-size: 24px;
-          opacity: 0.8;
-        }
-        .floaty:nth-child(odd) { animation-duration: 10s; font-size: 20px; }
-        .floaty:nth-child(even) { animation-duration: 14s; font-size: 26px; }
-        @media (max-width: 600px) {
-          .card { padding: 20px !important; border-radius: 10px !important; }
-          h1 { font-size: 22px !important; }
-          h2 { font-size: 18px !important; }
-          ul { font-size: 14px !important; }
-          .emoji-picker span { font-size: 20px !important; }
-        }
-      `}</style>
 
-      {[...Array(15)].map((_, i) => (
-        <div
-          key={i}
-          className="floaty"
-          style={{
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 10}s`
-          }}
-        >
-          {Math.random() > 0.5 ? '💖' : '✨'}
-        </div>
-      ))}
+      {/* ...floaties and rest of the content above... */}
 
-      <div className="card" style={{
-        maxWidth: '700px',
-        margin: '0 auto',
-        backgroundColor: '#ffffffee',
-        padding: '35px',
-        borderRadius: '25px',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-        transition: 'transform 0.3s ease',
-        animation: 'fadeIn 0.8s ease-in-out',
-        border: '3px dashed #b08ee0',
-        position: 'relative',
-        zIndex: 2
+      {/* Polaroid Style Photo */}
+      <div style={{
+        marginTop: '40px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        background: '#fff',
+        padding: '12px',
+        borderRadius: '12px',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+        width: 'fit-content',
+        marginLeft: 'auto',
+        marginRight: 'auto'
       }}>
-        <h1 style={{ fontSize: '30px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#444' }}>
-          🌿 Disha’s Daily Wellness Checklist 🌿
-        </h1>
-        <p style={{ textAlign: 'center', fontSize: '16px', color: '#555', marginBottom: '20px' }}>
-          Hi Disha, how are you doing today? This is your little space of calm — made with love, just for you. ❤️
-        </p>
-
-        <div style={{ borderTop: '2px dashed #ccc', paddingTop: '20px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#555', marginBottom: '10px' }}>
-            {days[dayIndex].title}
-          </h2>
-          <p style={{ fontStyle: 'italic', fontSize: '15px', color: '#777', marginBottom: '20px' }}>
-            {days[dayIndex].quote}
-          </p>
-
-          <ul style={{ paddingLeft: '0px' }}>
-            {days[dayIndex].goals.map((goal, i) => (
-              <li key={i} style={{ marginBottom: '12px', fontSize: '16px', color: '#333', listStyle: 'none' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.3s ease' }}>
-                  <input
-                    type="checkbox"
-                    checked={checkedGoals.includes(i)}
-                    onChange={() => toggleCheckbox(i)}
-                  />
-                  <span style={{ textDecoration: checkedGoals.includes(i) ? 'line-through' : 'none' }}>{goal}</span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div style={{ marginTop: '30px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#444', marginBottom: '8px' }}>How are you feeling today?</h3>
-          <div className="emoji-picker" style={{ fontSize: '24px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-            {['😄', '😐', '😢', '🥹'].map((emoji) => (
-              <span
-                key={emoji}
-                onClick={() => setMoodValue(emoji)}
-                style={{
-                  cursor: 'pointer',
-                  transform: mood === emoji ? 'scale(1.2)' : 'scale(1)',
-                  transition: 'transform 0.2s'
-                }}
-              >
-                {emoji}
-              </span>
-            ))}
-          </div>
-          {mood && <p style={{ marginTop: '10px', color: '#666' }}>Mood saved: {mood}</p>}
-        </div>
-
-        <div style={{
-          marginTop: '40px',
-          background: '#ffe0f0',
-          borderRadius: '15px',
-          padding: '20px',
-          fontSize: '16px',
-          color: '#333',
-          fontStyle: 'italic',
+        <img
+          src="/disha-polaroid.png"
+          alt="Sumeet & Disha"
+          style={{
+            width: '220px',
+            height: 'auto',
+            borderRadius: '6px',
+            objectFit: 'cover'
+          }}
+        />
+        <p style={{
+          marginTop: '8px',
+          fontSize: '14px',
+          fontWeight: '500',
           textAlign: 'center',
-          border: '2px dashed #ffb3d7',
-          boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+          color: '#444'
         }}>
-          💌 {loveNotes[dayIndex % loveNotes.length]}
-        </div>
-
-        {/* Journal box */}
-        <div style={{
-          marginTop: '30px',
-          background: '#f9f9f9',
-          padding: '15px',
-          borderRadius: '10px',
-          border: '1px solid #ccc'
-        }}>
-          <label htmlFor="journal" style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px', color: '#444' }}>Today’s Journal:</label>
-          <textarea
-            id="journal"
-            value={journal}
-            onChange={handleJournalChange}
-            placeholder="Write how you feel today..."
-            rows={4}
-            style={{
-              width: '100%',
-              borderRadius: '8px',
-              padding: '10px',
-              fontFamily: 'inherit',
-              fontSize: '14px',
-              border: '1px solid #ccc',
-              resize: 'vertical'
-            }}
-          />
-        </div>
-
-        <p style={{ marginTop: '40px', fontSize: '14px', textAlign: 'center', color: '#666' }}>
-          One day at a time, and I’ll be here with you through it all. 🌈
+          This is our journey — one day at a time 💫
         </p>
       </div>
+
     </div>
   );
 }
