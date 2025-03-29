@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
   const [dayIndex, setDayIndex] = useState(0);
@@ -77,25 +78,32 @@ export default function Home() {
   const days = generateDays();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const today = new Date();
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() + 1);
-      const dayDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-      const index = dayDiff >= 0 && dayDiff < 180 ? dayDiff : 0;
-      setDayIndex(index);
+    const today = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() + 1);
+    const dayDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    const index = dayDiff >= 0 && dayDiff < 180 ? dayDiff : 0;
+    setDayIndex(index);
 
-      const storedChecks = localStorage.getItem(`checked-${index}`);
-      if (storedChecks) setCheckedGoals(JSON.parse(storedChecks));
+    const storedChecks = localStorage.getItem(`checked-${index}`);
+    if (storedChecks) setCheckedGoals(JSON.parse(storedChecks));
 
-      const storedMood = localStorage.getItem(`mood-${index}`);
-      if (storedMood) setMood(storedMood);
+    const storedMood = localStorage.getItem(`mood-${index}`);
+    if (storedMood) setMood(storedMood);
 
-      const storedJournal = localStorage.getItem(`journal-${index}`);
-      if (storedJournal) setJournal(storedJournal);
-    }, 0);
+    const fetchJournal = async () => {
+      const { data } = await supabase
+        .from('journals')
+        .select('entry')
+        .eq('day', index + 1)
+        .eq('author', 'Disha');
 
-    return () => clearTimeout(timer);
+      if (data && data.length > 0) {
+        setJournal(data[0].entry);
+      }
+    };
+
+    fetchJournal();
   }, []);
 
   const toggleCheckbox = (i) => {
@@ -114,207 +122,75 @@ export default function Home() {
     localStorage.setItem(`mood-${dayIndex}`, value);
   };
 
-  const handleJournalChange = (e) => {
+  const handleJournalChange = async (e) => {
     const value = e.target.value;
     setJournal(value);
-    localStorage.setItem(`journal-${dayIndex}`, value);
+
+    await supabase
+      .from('journals')
+      .upsert([
+        {
+          day: dayIndex + 1,
+          entry: value,
+          author: 'Disha'
+        }
+      ]);
   };
 
   return (
-    <div style={{
-      position: 'relative',
-      overflow: 'hidden',
-      padding: '5vw',
-      fontFamily: '"Fredoka", sans-serif',
-      background: 'linear-gradient(to bottom, #c2b6f3, #fcb8e1, #ffdbc9, #fff5b1)',
-      minHeight: '100vh'
-    }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes float {
-          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-        .floaty {
-          position: absolute;
-          bottom: -50px;
-          animation: float 12s linear infinite;
-          font-size: 24px;
-          opacity: 0.8;
-        }
-        .floaty:nth-child(odd) { animation-duration: 10s; font-size: 20px; }
-        .floaty:nth-child(even) { animation-duration: 14s; font-size: 26px; }
-        @media (max-width: 600px) {
-          .card { padding: 20px !important; border-radius: 10px !important; }
-          h1 { font-size: 22px !important; }
-          h2 { font-size: 18px !important; }
-          ul { font-size: 14px !important; }
-        }
-      `}</style>
+    <div className="min-h-screen bg-white p-6 font-sans">
+      <h1 className="text-3xl font-bold text-center mb-2">🌿 Disha’s Daily Wellness Checklist 🌿</h1>
+      <p className="text-center text-sm text-gray-700 mb-6">Hi Disha, how are you doing today? This is your safe space 🌸</p>
 
-      {[...Array(15)].map((_, i) => (
-        <div
-          key={i}
-          className="floaty"
-          style={{
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 10}s`
-          }}
-        >
-          {Math.random() > 0.5 ? '💖' : '✨'}
-        </div>
-      ))}
+      <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-4 text-center text-sm font-medium text-gray-700 mb-6">
+        🌼 {affirmations[dayIndex % affirmations.length]}
+      </div>
 
-      <div className="card" style={{
-        maxWidth: '700px',
-        margin: '0 auto',
-        backgroundColor: '#ffffffee',
-        padding: '35px',
-        borderRadius: '25px',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-        border: '3px dashed #b08ee0'
-      }}>
-        <h1 style={{ fontSize: '30px', fontWeight: 'bold', textAlign: 'center', color: '#444' }}>
-          🌿 Disha’s Daily Wellness Checklist 🌿
-        </h1>
-        <p style={{ textAlign: 'center', fontSize: '16px', color: '#555' }}>
-          Hi Disha, how are you doing today? This is your little space of calm — made with love, just for you. ❤️
-        </p>
+      <div className="max-w-xl mx-auto">
+        <h2 className="text-lg font-semibold mb-1">{days[dayIndex].title}</h2>
+        <p className="text-xs italic text-gray-500 mb-4">{days[dayIndex].quote}</p>
 
-        <div style={{
-          backgroundColor: '#fff6f2',
-          margin: '25px 0',
-          padding: '18px',
-          borderRadius: '12px',
-          border: '2px dashed #ffc4dd',
-          textAlign: 'center',
-          fontStyle: 'italic',
-          color: '#444',
-          fontSize: '15px'
-        }}>
-          🌸 {affirmations[dayIndex % affirmations.length]}
-        </div>
-
-        <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#555' }}>{days[dayIndex].title}</h2>
-        <p style={{ fontStyle: 'italic', fontSize: '15px', color: '#777' }}>{days[dayIndex].quote}</p>
-        <ul style={{ paddingLeft: 0 }}>
+        <ul className="mb-6">
           {days[dayIndex].goals.map((goal, i) => (
-            <li key={i} style={{ marginBottom: '12px', fontSize: '16px', listStyle: 'none', color: '#333' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <input
-                  type="checkbox"
-                  checked={checkedGoals.includes(i)}
-                  onChange={() => toggleCheckbox(i)}
-                />
-                <span style={{ textDecoration: checkedGoals.includes(i) ? 'line-through' : 'none' }}>{goal}</span>
-              </label>
+            <li key={i} className="flex items-start space-x-2 mb-3">
+              <input type="checkbox" checked={checkedGoals.includes(i)} onChange={() => toggleCheckbox(i)} />
+              <span className={checkedGoals.includes(i) ? 'line-through text-gray-400' : ''}>{goal}</span>
             </li>
           ))}
         </ul>
 
-        <div style={{ textAlign: 'center', marginTop: '30px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#444' }}>How are you feeling today?</h3>
-          <div style={{ fontSize: '24px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold mb-1">How are you feeling today?</h3>
+          <div className="flex gap-4 text-2xl">
             {['😄', '😐', '😢', '🥹'].map((emoji) => (
-              <span
-                key={emoji}
-                onClick={() => setMoodValue(emoji)}
-                style={{
-                  cursor: 'pointer',
-                  transform: mood === emoji ? 'scale(1.2)' : 'scale(1)',
-                  transition: 'transform 0.2s'
-                }}
-              >
+              <span key={emoji} onClick={() => setMoodValue(emoji)} className="cursor-pointer">
                 {emoji}
               </span>
             ))}
           </div>
-          {mood && <p style={{ color: '#666', marginTop: '10px' }}>Mood saved: {mood}</p>}
+          {mood && <p className="text-xs text-gray-500 mt-2">Mood saved: {mood}</p>}
         </div>
 
-        <div style={{
-          marginTop: '30px',
-          background: '#f9f9f9',
-          padding: '15px',
-          borderRadius: '10px',
-          border: '1px solid #ccc'
-        }}>
-          <label htmlFor="journal" style={{ fontWeight: 'bold', color: '#444' }}>Today’s Journal:</label>
+        <div className="mb-6">
+          <label className="text-sm font-semibold" htmlFor="journal">Today’s Journal:</label>
           <textarea
             id="journal"
             value={journal}
             onChange={handleJournalChange}
             placeholder="Write how you feel today..."
+            className="w-full mt-1 border border-gray-300 rounded-md p-2 text-sm"
             rows={4}
-            style={{
-              width: '100%',
-              marginTop: '8px',
-              borderRadius: '8px',
-              padding: '10px',
-              fontFamily: 'inherit',
-              fontSize: '14px',
-              border: '1px solid #ccc',
-              resize: 'vertical'
-            }}
           />
         </div>
 
-        <div style={{
-          marginTop: '40px',
-          background: '#ffe0f0',
-          borderRadius: '15px',
-          padding: '20px',
-          fontSize: '16px',
-          color: '#333',
-          fontStyle: 'italic',
-          textAlign: 'center',
-          border: '2px dashed #ffb3d7',
-          boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
-        }}>
+        <div className="bg-pink-100 text-pink-700 italic rounded-md text-center p-4 border border-pink-300">
           💌 {loveNotes[dayIndex % loveNotes.length]}
         </div>
 
-        <div style={{
-          marginTop: '40px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          background: '#fff',
-          padding: '12px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-          width: 'fit-content',
-          marginLeft: 'auto',
-          marginRight: 'auto'
-        }}>
-          <img
-            src="/disha-polaroid.png"
-            alt="Sumeet & Disha"
-            style={{
-              width: '220px',
-              height: 'auto',
-              borderRadius: '6px',
-              objectFit: 'cover'
-            }}
-          />
-          <p style={{
-            marginTop: '8px',
-            fontSize: '14px',
-            fontWeight: '500',
-            textAlign: 'center',
-            color: '#444'
-          }}>
-            This is our journey — one day at a time 💫
-          </p>
+        <div className="mt-8 text-center">
+          <img src="/disha-polaroid.png" alt="Sumeet & Disha" className="mx-auto rounded-md shadow-md w-48 h-auto" />
+          <p className="text-xs text-gray-500 mt-2">This is our journey — one day at a time 💫</p>
         </div>
-
-        <p style={{ marginTop: '40px', fontSize: '14px', textAlign: 'center', color: '#666' }}>
-          One day at a time, and I’ll be here with you through it all. 🌈
-        </p>
       </div>
     </div>
   );
