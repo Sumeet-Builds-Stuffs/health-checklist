@@ -86,46 +86,35 @@ export default function Home() {
   return (
     <div style={{
       padding: '5vw',
-      fontFamily: 'Comic Sans MS, cursive, sans-serif',
+      fontFamily: '"Fredoka", sans-serif',
       background: 'linear-gradient(to bottom, #c2b6f3, #fcb8e1, #ffdbc9, #fff5b1)',
       minHeight: '100vh',
       transition: 'background-color 0.5s ease-in-out',
       animation: 'fadeIn 1s ease-in-out'
     }}>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+        :root { color-scheme: light; }
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
-
         @media (max-width: 600px) {
           .card {
             padding: 20px !important;
             border-radius: 10px !important;
           }
-
-          h1 {
-            font-size: 22px !important;
-          }
-
-          h2 {
-            font-size: 18px !important;
-          }
-
-          ul {
-            font-size: 14px !important;
-          }
-
-          .emoji-picker span {
-            font-size: 20px !important;
-          }
+          h1 { font-size: 22px !important; }
+          h2 { font-size: 18px !important; }
+          ul { font-size: 14px !important; }
+          .emoji-picker span { font-size: 20px !important; }
         }
       `}</style>
 
       <div className="card" style={{
         maxWidth: '700px',
         margin: '0 auto',
-        backgroundColor: '#ffffffaa',
+        backgroundColor: '#ffffffee',
         padding: '35px',
         borderRadius: '25px',
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
