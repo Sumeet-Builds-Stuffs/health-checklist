@@ -6,19 +6,19 @@ export default function Home() {
 
   const generateDays = () => {
     const baseQuotes = [
-      "Every day is a fresh start. 💫",
-      "Small steps every day lead to big changes. 🧗‍♀️",
-      "You’re stronger than you think. 💥",
-      "Healing isn’t linear, and that’s okay. 🌈",
-      "Celebrate progress, not perfection. 🎉"
+      "You’re not alone. I’m proud of you for every small win. 💖",
+      "One day we’ll look back and smile at how far we’ve come. 🌅",
+      "Take it one step at a time, love. You’re doing amazing. 🧡",
+      "Even on hard days, your strength shines. ✨",
+      "You’ve got me. Always. 💌"
     ];
 
     const baseGoals = [
-      "No sugar today 🍬❌",
-      "Eat 1 bowl of greens 🥬",
-      "15 min sunshine ☀️",
-      "Evening walk for 20 mins 🚶‍♀️",
-      "Drink 2L of water 💧"
+      "Drink 2L of water 💧",
+      "Eat something nourishing today 🍲",
+      "Take a 10-minute walk and breathe 🌿",
+      "Give yourself 5 mins of peace 🧘‍♀️",
+      "Send a message if you're feeling low 📱"
     ];
 
     let days = [];
@@ -52,30 +52,30 @@ export default function Home() {
 
   return (
     <div style={{ padding: '40px', fontFamily: 'Segoe UI, sans-serif', backgroundColor: '#f7f9fb', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto', backgroundColor: '#ffffff', padding: '30px', borderRadius: '15px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: 'bold', textAlign: 'center', marginBottom: '10px', color: '#333' }}>
+      <div style={{ maxWidth: '650px', margin: '0 auto', backgroundColor: '#ffffff', padding: '35px', borderRadius: '15px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+        <h1 style={{ fontSize: '30px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#333' }}>
           Disha’s Daily Wellness Checklist 🌿
         </h1>
-        <p style={{ textAlign: 'center', fontSize: '16px', color: '#666', marginBottom: '30px' }}>
-          Hi Disha, how are you doing today? ✨
+        <p style={{ textAlign: 'center', fontSize: '16px', color: '#666', marginBottom: '20px' }}>
+          Hi Disha, how are you doing today? This is your little space of calm — made with love, just for you. ❤️
         </p>
 
-        <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#444', marginBottom: '10px' }}>
-          {days[dayIndex].title}
-        </h2>
-
-        <p style={{ fontStyle: 'italic', fontSize: '15px', color: '#777', marginBottom: '20px' }}>
-          {days[dayIndex].quote}
-        </p>
-
-        <ul style={{ paddingLeft: '20px' }}>
-          {days[dayIndex].goals.map((goal, i) => (
-            <li key={i} style={{ marginBottom: '12px', fontSize: '16px', color: '#333' }}>{goal}</li>
-          ))}
-        </ul>
+        <div style={{ borderTop: '1px solid #eee', paddingTop: '20px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#444', marginBottom: '10px' }}>
+            {days[dayIndex].title}
+          </h2>
+          <p style={{ fontStyle: 'italic', fontSize: '15px', color: '#777', marginBottom: '20px' }}>
+            {days[dayIndex].quote}
+          </p>
+          <ul style={{ paddingLeft: '20px' }}>
+            {days[dayIndex].goals.map((goal, i) => (
+              <li key={i} style={{ marginBottom: '12px', fontSize: '16px', color: '#333' }}>{goal}</li>
+            ))}
+          </ul>
+        </div>
 
         <p style={{ marginTop: '30px', fontSize: '14px', textAlign: 'center', color: '#999' }}>
-          You got this. Just one day at a time. 🌱
+          One day at a time, and I’ll be here with you through it all. 💫
         </p>
       </div>
     </div>
