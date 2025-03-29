@@ -6,6 +6,19 @@ export default function Home() {
   const [checkedGoals, setCheckedGoals] = useState([]);
   const [mood, setMood] = useState(null);
 
+  const loveNotes = [
+    "You don’t have to be perfect to be loved. You already are 💕",
+    "You’re doing amazing, even if it doesn’t feel like it 💫",
+    "One step at a time. You’ve got this — and you’ve got me 🫶",
+    "Some days will feel heavier. That’s okay. You’re allowed 🌧️",
+    "You make my world brighter — even on your dim days 🌈",
+    "Breathe. You’re safe. You’re strong. You’re supported 💖",
+    "You’re allowed to rest. Rest is part of healing 💤",
+    "Even when you doubt yourself, I believe in you ✨",
+    "Progress, not perfection. Always. 🌱",
+    "You’re my favorite kind of magic 💫"
+  ];
+
   const generateDays = () => {
     const baseQuotes = [
       "You’re not alone. I’m proud of you for every small win. 💖",
@@ -123,7 +136,6 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Floating hearts/sparkles */}
       {[...Array(15)].map((_, i) => (
         <div
           key={i}
@@ -199,6 +211,22 @@ export default function Home() {
             ))}
           </div>
           {mood && <p style={{ marginTop: '10px', color: '#666' }}>Mood saved: {mood}</p>}
+        </div>
+
+        {/* Love Note */}
+        <div style={{
+          marginTop: '40px',
+          background: '#ffe0f0',
+          borderRadius: '15px',
+          padding: '20px',
+          fontSize: '16px',
+          color: '#333',
+          fontStyle: 'italic',
+          textAlign: 'center',
+          border: '2px dashed #ffb3d7',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+        }}>
+          💌 {loveNotes[dayIndex % loveNotes.length]}
         </div>
 
         <p style={{ marginTop: '40px', fontSize: '14px', textAlign: 'center', color: '#666' }}>
