@@ -86,8 +86,8 @@ export default function Home() {
   return (
     <div style={{
       padding: '5vw',
-      fontFamily: 'Segoe UI, sans-serif',
-      backgroundColor: '#f7f9fb',
+      fontFamily: 'Comic Sans MS, cursive, sans-serif',
+      background: 'linear-gradient(to bottom, #c2b6f3, #fcb8e1, #ffdbc9, #fff5b1)',
       minHeight: '100vh',
       transition: 'background-color 0.5s ease-in-out',
       animation: 'fadeIn 1s ease-in-out'
@@ -125,22 +125,23 @@ export default function Home() {
       <div className="card" style={{
         maxWidth: '700px',
         margin: '0 auto',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#ffffffaa',
         padding: '35px',
-        borderRadius: '15px',
+        borderRadius: '25px',
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
         transition: 'transform 0.3s ease',
-        animation: 'fadeIn 0.8s ease-in-out'
+        animation: 'fadeIn 0.8s ease-in-out',
+        border: '3px dashed #b08ee0'
       }}>
-        <h1 style={{ fontSize: '30px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#333' }}>
-          Disha’s Daily Wellness Checklist 🌿
+        <h1 style={{ fontSize: '30px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#444' }}>
+          🌿 Disha’s Daily Wellness Checklist 🌿
         </h1>
-        <p style={{ textAlign: 'center', fontSize: '16px', color: '#666', marginBottom: '20px' }}>
+        <p style={{ textAlign: 'center', fontSize: '16px', color: '#555', marginBottom: '20px' }}>
           Hi Disha, how are you doing today? This is your little space of calm — made with love, just for you. ❤️
         </p>
 
-        <div style={{ borderTop: '1px solid #eee', paddingTop: '20px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#444', marginBottom: '10px' }}>
+        <div style={{ borderTop: '2px dashed #ccc', paddingTop: '20px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#555', marginBottom: '10px' }}>
             {days[dayIndex].title}
           </h2>
           <p style={{ fontStyle: 'italic', fontSize: '15px', color: '#777', marginBottom: '20px' }}>
@@ -183,8 +184,8 @@ export default function Home() {
           {mood && <p style={{ marginTop: '10px', color: '#666' }}>Mood saved: {mood}</p>}
         </div>
 
-        <p style={{ marginTop: '40px', fontSize: '14px', textAlign: 'center', color: '#999' }}>
-          One day at a time, and I’ll be here with you through it all. 💫
+        <p style={{ marginTop: '40px', fontSize: '14px', textAlign: 'center', color: '#666' }}>
+          One day at a time, and I’ll be here with you through it all. 🌈
         </p>
       </div>
     </div>
